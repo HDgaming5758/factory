@@ -19,9 +19,9 @@
 #                   Variable panel                   #
 #                                                    #
 default=install                                      #
-version="Your version"                               #
+version="v.0.1"                                      #
 name="Your logicelle name"                           #
-directory=/etc                                       #
+path=/etc                                            #
 dirname=yourfilename                                 #
 filename=yourfile.txt                                #
 exefilename=factory.sh                               #
@@ -79,6 +79,18 @@ variablemap()
 	echo $blank
 	echo "$name version : '$version'"
 	echo $blank
+	echo "Finel message : '$finelmsg'"
+	echo $blank
+	echo "Bin : '$bin'"
+	echo $blank
+	echo "Save exe as : '$newexefilename'"
+	echo $blank
+	echo "Directory name : '$dirname'"
+	echo $blank
+	echo "Path : '$path'"
+	echo $blank
+	echo "Filename : '$filename'"
+	echo $blank
 }
 dircheck()
 {
@@ -105,14 +117,14 @@ install()
 	echo "-[*]- Installtion $name -[*]-"
 	echo $blank
 	echo "[*] Création of '$filename'"
-	mkdir $directory/$dirname
+	mkdir $path/$dirname
 	echo $blank
-	dircheck $directory/$dirname
+	dircheck $path/$dirname
 	echo $blank
-	echo "[*] Copy of '$filename' in '$directory/$dirname'"
-	cp $filename $directory/$dirname/$filename
+	echo "[*] Copy of '$filename' in '$path/$dirname'"
+	cp $filename $path/$dirname/$filename
 	echo $blank
-	filecheck $directory/$dirname/$filename $filename
+	filecheck $path/$dirname/$filename $filename
 	echo $blank
 	echo "[*] Copy of '$exefilename' in '$bin' under the name '$newexefilename'"
 	cp $exefilename $bin/$newexefilename
@@ -128,7 +140,7 @@ uninstall()
 	echo "-[*]- Uninstalltion $name -[*]-"
 	echo $blank
 	echo "[*] Deleting '$filename'"
-	rm -rf $directory/$dirname
+	rm -rf $path/$dirname
 	echo $blank
 	echo "[*] Deleting '$newexefilename' in '$bin'"
 	rm $bin/$newexefilename
