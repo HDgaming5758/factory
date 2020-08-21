@@ -18,7 +18,8 @@
 #                                                    #
 #                   Variable panel                   #
 #                                                    #
-default=install                                      #
+default="install"                                    #
+errormenu=errorgui                                   #
 version="v.0.1"                                      #
 name="Your logicelle name"                           #
 path=/etc                                            #
@@ -36,6 +37,33 @@ error()
 	echo $blank
 	echo "[E] Error code '$2'"
 	exit $2
+}
+errorgui()
+{
+	zenity --error --width=500 --height=200 --text "$(echo $blank && echo "[E] $1" && echo $blank && echo "[E] Error code '$2'")" > null
+	exit $?
+}
+download()
+{
+	tmp=$(wget $1 2>&1 | tee /dev/stderr | sed -u "s/^ *[0-9]*K[ .]*\([0-9]*%\).*/\1/" | zenity --width=400 --height=100 --title "Downloading ..." --text "Downloading ..." --progress --auto-close --auto-kill 2> /dev/null})
+    echo
+}
+askgui()
+{
+	zenity --question --width=400 --height=100 --title "Factory - $name" --text "$1"
+	ask=$(echo $?)
+}
+checkpermision()
+{
+	echo "[*] Check permison"
+	echo $blank
+	echo "factory check perm" > /factory.tmp
+	if [ "$?" == "1" ]
+	then
+		$errormenu "Permissions were not set correctly" 1
+	else
+		echo "[+] Ok"
+	fi
 }
 help()
 {
@@ -98,7 +126,7 @@ dircheck()
 	then
 		echo "[+] Ok"
 	else
-		error "A problem is come when the création of '$dirname'"
+		$errormenu "A problem is come when the création of '$dirname'" $?
 	fi
 }
 filecheck()
@@ -107,7 +135,7 @@ filecheck()
 	then
 		echo "[+] Ok"
 	else
-		error "A problem is come when the création of '$2'"
+		$errormenu "A problem is come when the création of '$2'" $?
 	fi
 }
 install()
@@ -116,6 +144,7 @@ install()
 	echo $blank
 	echo "-[*]- Installtion $name -[*]-"
 	echo $blank
+	checkpermision
 	echo "[*] Création of '$filename'"
 	mkdir $path/$dirname
 	echo $blank
